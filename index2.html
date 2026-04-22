@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .notification-popup {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14);
+            max-width: 400px;
+            text-align: center;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        .notification-popup.show {
+            display: block;
+        }
+
+        .notification-popup h2 {
+            margin: 0 0 16px 0;
+            font-size: 20px;
+            color: #030303;
+        }
+
+        .notification-popup p {
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            color: #606060;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-allow {
+            background-color: #065fd4;
+            color: white;
+        }
+
+        .btn-allow:hover {
+            background-color: #0552b5;
+        }
+
+        .btn-deny {
+            background-color: #f0f0f0;
+            color: #030303;
+        }
+
+        .btn-deny:hover {
+            background-color: #e0e0e0;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            z-index: 9998;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -48%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a demo page.</p>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- YouTube-style notification popup -->
+    <div id="notification-popup" class="notification-popup">
+        <h2>Get notifications</h2>
+        <p>We'd like to send you push notifications. You can unsubscribe at any time.</p>
+        <div class="button-group">
+            <button class="btn btn-deny" id="deny-btn">Not now</button>
+            <button class="btn btn-allow" id="allow-btn">Allow</button>
+        </div>
+    </div>
+
+    <script>
+        function checkNotificationSupport() {
+            if (!('Notification' in window)) {
+                console.log('This browser does not support notifications.');
+                return;
+            }
+
+            if (Notification.permission === 'default') {
+                // Show custom popup
+                showNotificationPopup();
+            } else if (Notification.permission === 'granted') {
+                console.log('Notifications already enabled.');
+            } else {
+                console.log('Notifications denied.');
+            }
+        }
+
+        function showNotificationPopup() {
+            const popup = document.getElementById('notification-popup');
+            const overlay = document.getElementById('overlay');
+            
+            popup.classList.add('show');
+            overlay.classList.add('show');
+
+            document.getElementById('allow-btn').onclick = function() {
+                popup.classList.remove('show');
+                overlay.classList.remove('show');
+                requestNotificationPermission();
+            };
+
+            document.getElementById('deny-btn').onclick = function() {
+                popup.classList.remove('show');
+                overlay.classList.remove('show');
+            };
+        }
+
+        function requestNotificationPermission() {
+            Notification.requestPermission().then(function(permission) {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                }
+            });
+        }
+
+        window.onload = checkNotificationSupport;
+    </script>
+</body>
+</html>
