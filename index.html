@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Demo</title>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a demo page.</p>
+
+    <script>
+        // Function to check notification support and permission
+        function checkNotificationSupport() {
+            if (!('Notification' in window)) {
+                alert('This browser does not support notifications.');
+                return;
+            }
+
+            if (Notification.permission === 'default') {
+                // Show native browser prompt immediately
+                requestNotificationPermission();
+            } else if (Notification.permission === 'granted') {
+                console.log('Notifications already enabled.');
+            } else {
+                console.log('Notifications denied.');
+            }
+        }
+
+        // Request permission (triggers browser's native prompt)
+        function requestNotificationPermission() {
+            Notification.requestPermission().then(function(permission) {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        }
+
+        // Run on page load
+        window.onload = checkNotificationSupport;
+    </script>
+</body>
+</html>
