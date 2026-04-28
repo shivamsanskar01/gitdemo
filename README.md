@@ -2,4 +2,6 @@
 -- index.html contains youtube type 
 -- index2.html contains center box open when any website opens
 
-Author -- Shivam
+Author -- Shivam Upadhyay
+
+~~ i had created windows feature to show notification card of cookies card
